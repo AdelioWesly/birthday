@@ -1,39 +1,35 @@
-// Function to start voice recognition
-function startVoiceRecognition() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
+// Mendeteksi goyangan untuk memadamkan lilin
+function detectShake() {
+  let lastX, lastY, lastZ;
+  let threshold = 15; // Ambang batas goyangan, sesuaikan sesuai kebutuhan
 
-  recognition.onstart = () => {
-    console.log("Voice recognition started. Try to blow the candle.");
-  };
+  // Merekam nilai terakhir dari sensor
+  window.addEventListener(
+    "devicemotion",
+    function (e) {
+      let acceleration = e.accelerationIncludingGravity;
+      let currX = acceleration.x;
+      let currY = acceleration.y;
+      let currZ = acceleration.z;
 
-  recognition.onspeechend = () => {
-    recognition.stop();
-    console.log("Speech recognition stopped.");
-  };
+      if (Math.abs(currX - lastX) > threshold || Math.abs(currY - lastY) > threshold || Math.abs(currZ - lastZ) > threshold) {
+        extinguishCandle();
+      }
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript.toLowerCase();
-    console.log("Detected speech:", transcript);
-    if (transcript.includes("tiup")) {
-      extinguishCandle();
-    }
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error detected: " + event.error);
-  };
-
-  recognition.start();
+      // Update nilai terakhir
+      lastX = currX;
+      lastY = currY;
+      lastZ = currZ;
+    },
+    false
+  );
 }
 
-// Function to extinguish the candle flame
 function extinguishCandle() {
   const flame = document.querySelector(".flame");
   flame.classList.add("out");
-  console.log("Candle extinguished.");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  startVoiceRecognition();
+  detectShake();
 });
