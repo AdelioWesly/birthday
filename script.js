@@ -15,7 +15,7 @@ function startVoiceRecognition() {
   recognition.onresult = (event) => {
     const transcript = event.results[0][0].transcript.toLowerCase();
     console.log("Detected speech:", transcript);
-    if (transcript.includes("blow")) {
+    if (transcript.includes("tiup")) {
       extinguishCandle();
     }
   };
