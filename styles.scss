@@ -52,7 +52,8 @@ body {
 }
 
 @keyframes flicker {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: translateX(-50%) scaleY(1);
   }
@@ -69,5 +70,3 @@ body {
     transform: translateX(-50%) scaleY(0.8);
   }
 }
-
-/*# sourceMappingURL=styles.css.map */
